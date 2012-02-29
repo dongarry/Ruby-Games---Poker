@@ -1,0 +1,6 @@
+Issues:
+
+* Problem with your Straight : 2,3,4 is fine, A,2,3 is not.
+* Same score - use highest card to determine winner.
+* Order your straight by descending values
+* cater for invalid deal (e.g same card twice).
