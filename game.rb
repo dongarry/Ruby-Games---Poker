@@ -5,46 +5,62 @@ class Game
 	
 	attr_reader :deck
 	
-	def initialize
+	def initialize no_players=2
 		@deck = Deck.new
-		@score_1 = 0 # bitfield
-		@score_2 = 0 # bitfield
+		@no_of_players = no_players
 	end
 	
-	def play_game h1=[], h2=[]
-		
-		#Parameters are for testing purposes.
-		
-		@my_hand1 = @deck.deal h1
-		
-		@my_hand2 = @deck.deal h2
+	def play_game  *test_hands 
 			
-		puts "Hand 1 : #{@my_hand1.hand.join(",")} : #{@my_hand1.score}"
-		puts "Hand 2 : #{@my_hand2.hand.join(",")} #{@my_hand2.score}"
-		
-		score_game @my_hand1,@my_hand2
+		@no_of_players.times do |h|
+			@deck.deal(test_hands[h].nil? ? [] : test_hands[h])
+		end
 			
+		if @deck.check_deal 
+			score_game 		
+		else
+			puts "Bad deal!"
+		end
 	end	
 	
-	def score_game h1, h2
+	def score_game contenders=[]
 		
-		if h1.score>h2.score
-			puts "Hand 1 wins!"
-		elsif h2.score>h1.score
-			puts "Hand 2 wins!"
+		@deck.hands.sort!{|h1,h2| h1.score<=> h2.score}
+		
+		if @deck.hands[0].score==0
+			get_highest_card @deck.hands
+		else
+			contenders << @deck.hands[0]
+
+			@deck.hands.each do |c| 
+				unless c.score == @deck.hands[0].score 
+					break
+				end
+				contenders << c
+			end			
+		end
+
+		if contenders.length>1 
+			get_highest_card contenders		
+		else
+			puts "Winner : #{@deck.hands[0].hand}"
 		end
 	end
 	
-	
+	def get_highest_card hands
+		contenders=[]
+
+
+#		hands.sort!{|h1,h2| h1.highest_cards[0]<=> h2.highest_cards[0]}			
+			#contenders<<@deck.hands[0].higest_cards[0]
+		hands.each {|h| puts h.highest_cards[0]}
+
+	end		
+
 end
 
 game = Game.new
-#game.play_game
-game.play_game ['H2','S3','D4','C5','S6'], ['H5','H6','H7','H9','H8']
+game.play_game 
+#game.play_game ['H2','C3','D12','H13','H14'], ['S2','H3','H4','C13','D14']
 
-puts game.deck.hands[0].hand.length
-
-game.deck.hands.each do |h|
-	puts h.score
-end
 

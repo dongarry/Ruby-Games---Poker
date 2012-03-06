@@ -5,11 +5,11 @@ class Hand
 
 	include Card_funcs
 	
-	attr_reader :score, :highest_card, :hand
+	attr_reader :score, :highest_cards, :hand
 	
 	def initialize dealt_hand, deck 
 		@score = 0 		
-		@highest_card = String.new
+		@highest_cards = []
 		@hand = dealt_hand
 		@my_deck = deck
 		
@@ -29,7 +29,7 @@ class Hand
 		
 		#Take the highest card for reference.
 		
-		@highest_card = @card_hand.sort.last
+		@highest_card = @card_hand.sort.reverse
 		
 		
 		# Scoring
@@ -37,33 +37,42 @@ class Hand
 		# 1 - A pair
 		# 2 - 2 pair 
 		# 4 - Match 3
-		# 8 - Straight
-		# 16 - Flush
-		# 32 - Full House = 2 pair plus 3 pair - 10? 
+		# 8 - Flush
+		# 16 - Straight
+		# 32 - Full House = 10? 
 		# 64 - Poker Four matching
 		# 128 - Straight Flush - 24?  
 		
 		# Put all scoring in the same place!!
 		if @suit_hand.uniq.length == 1 
 			@score += 8 
-			puts "Straight!" 
+			puts "Flush!" 
 		end
 		
-		flush=1
+		straight=1
+		pass=0
+		
 		4.times do |c|
-			if @card_hand[c].to_i+1 != @card_hand[c + 1]
-				flush=0
-				break 
+			
+			if @card_hand[c] +1 == @card_hand[c + 1]
+				next
+			elsif @card_hand.include?(@my_deck.card.first) && @card_hand.include?(@my_deck.card.last) && pass==0
+				pass=1
+				next
 			end
+			
+			#Not a straight
+			straight=0
+			break 
 		end		
 		
 		#should we simply return - can't get better! 
-		if flush == 1 
+		if straight == 1 
 			if @score & 8 > 0  then
 				puts "Straight Flush!"
 				@score=128
 			else
-				puts "Flush!"
+				puts "Straight!"
 				@score+= 16 
 			end
 			
