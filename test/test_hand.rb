@@ -1,7 +1,7 @@
 require 'game'
 require 'test/unit'
 
-# Using testRb to run this..
+# Using testRb to run this : testrb test
 
 class TestGame < Test::Unit::TestCase
 	
@@ -19,14 +19,14 @@ class TestGame < Test::Unit::TestCase
 		@game.play_game ['H6','S4','D2','C3','S13'], ['H5','C3','D4','S9','S10']
 		assert_equal(@game.deck.hands[0].score, 0) 
 		assert_equal(@game.deck.hands[1].score, 0)
-		assert_equal(@game.deck.hands[0].highest_card[0], 13)
-		assert_equal(@game.deck.hands[1].highest_card[0], 10)			
+		assert_equal(@game.deck.hands[0].highest_cards[0], 13)
+		assert_equal(@game.deck.hands[1].highest_cards[0], 10)			
 	end
 	
 	def test_pair_and_two_pair
 		@game.play_game ['H6','S4','D2','C2','S13'], ['H5','C3','D3','S9','S5']
-		assert_equal(@game.deck.hands[0].score, 1) #a Pair
-		assert_equal(@game.deck.hands[1].score, 2) #2 pair
+		assert_equal(@game.deck.hands[1].score, 1) #a Pair
+		assert_equal(@game.deck.hands[0].score, 2) #2 pair
 		
 	end
 	

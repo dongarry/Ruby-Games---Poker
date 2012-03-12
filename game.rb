@@ -25,15 +25,15 @@ class Game
 	
 	def score_game contenders=[]
 		
-		@deck.hands.sort!{|h1,h2| h1.score<=> h2.score}
+		@deck.hands.sort!{|h1,h2| h2.score<=>h1.score}
 		
 		if @deck.hands[0].score==0
 			get_highest_card @deck.hands
 		else
-			contenders << @deck.hands[0]
+			curr_score = @deck.hands[0].score
 
 			@deck.hands.each do |c| 
-				unless c.score == @deck.hands[0].score 
+				if c.score < curr_score 
 					break
 				end
 				contenders << c
@@ -41,26 +41,46 @@ class Game
 		end
 
 		if contenders.length>1 
+			puts "multiple contenders"
 			get_highest_card contenders		
-		else
-			puts "Winner : #{@deck.hands[0].hand}"
+		elsif contenders.length==1
+			puts "Winner : #{@deck.hands[0].hand.join(' ')}"
 		end
 	end
 	
 	def get_highest_card hands
+		
 		contenders=[]
 
+		5.times do |i|
+			hands.sort!{|h1,h2| h2.highest_cards[i]<=> h1.highest_cards[i]}			
+			h_c = hands[0].highest_cards[i]	
+			#contenders<<@deck.hands[i].higest_cards[i]
+				
+			hands.each do |h| 
+				if h.highest_cards[0]==h_c
+					contenders<<h
+				end
+			end		
+			
+			if contenders.length == 1
+				puts "Winning hand with highest card : #{h_c} : #{contenders[0].hand.join(' ')}"	
+				break
+			end
+		end
 
-#		hands.sort!{|h1,h2| h1.highest_cards[0]<=> h2.highest_cards[0]}			
-			#contenders<<@deck.hands[0].higest_cards[0]
-		hands.each {|h| puts h.highest_cards[0]}
+		if contenders.length>1
+			puts "DRAW! between :"
+			contenders.each {|c| puts c.hand.join('')}
+		end			
 
 	end		
 
 end
 
-game = Game.new
-game.play_game 
+game = Game.new 
+#game.play_game 
 #game.play_game ['H2','C3','D12','H13','H14'], ['S2','H3','H4','C13','D14']
-
+game.play_game ['H6','S4','D2','C2','S13'], ['H5','C3','D3','S9','S5']
+puts game.deck.hands[1].hand		
 

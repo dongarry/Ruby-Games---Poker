@@ -29,7 +29,7 @@ class Hand
 		
 		#Take the highest card for reference.
 		
-		@highest_card = @card_hand.sort.reverse
+		@highest_cards = @card_hand.sort.reverse
 		
 		
 		# Scoring

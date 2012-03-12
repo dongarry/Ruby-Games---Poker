@@ -4,3 +4,4 @@ Issues:
 * Same score - use highest card to determine winner. - done.
 * Order your straight by descending values - not relvant.
 * cater for invalid deal (e.g same card twice). - done.
+* Issue with same scores - just rank cards use
